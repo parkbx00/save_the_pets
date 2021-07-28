@@ -2,6 +2,8 @@ const settingBtn = document.querySelector(".field__setting");
 const confirmBtn = document.querySelector(".setting__submit-btn");
 const playBtn = document.querySelector(".field__play-btn");
 const setting = document.querySelector(".setting");
+const popup = document.querySelector(".field__popup");
+const popupText = document.querySelector(".field__popup-text");
 
 const timerInput = document.querySelector("#timer");
 const petsInput = document.querySelector("#pets");
@@ -32,20 +34,21 @@ confirmBtn.addEventListener("click", (e) => {
 });
 
 playBtn.addEventListener("click", () => {
-  if (playBtn.firstElementChild.matches(".fa-play")) startGame();
-  togglePlay();
+  if (playBtn.firstElementChild.matches(".fa-stop")) {
+    stopGame();
+  }
+
+  if (playBtn.firstElementChild.matches(".fa-play")) {
+    startGame();
+    changePlayToStop();
+  }
 });
 
 function toggleSetting() {
   setting.classList.toggle("active");
 }
 
-function togglePlay() {
-  if (playBtn.firstElementChild.matches(".fa-stop")) {
-    clearInterval(timerID);
-    return;
-  }
-
+function changePlayToStop() {
   playBtn.firstElementChild.classList.remove("fa-play");
   playBtn.firstElementChild.classList.add("fa-stop");
 }
@@ -72,6 +75,18 @@ function startGame() {
   startTimer();
 }
 
+function stopGame() {
+  clearInterval(timerID);
+  showPopupWithMessage();
+}
+
+function showPopupWithMessage(message) {
+  popup.classList.add("active");
+  popupText.textContent = message
+    ? message
+    : "Click the replay button to play again.";
+}
+
 function startTimer() {
   if (!minute && !second) return;
   minute && (minuteText.textContent = --minute);
@@ -90,7 +105,8 @@ function startTimer() {
 }
 
 // 1. Change Play icon to Stop icon => complete
-// 2. Add stop game function
+// 2. Add stop game function => complete
+// 2a. Add replay button functiona
 // 3. Populate pets and ticks to the field
 // 4. addEventlistner - pets === game end && ticks === counter goes down
 // 5. When pets are clicked, game ends with popup message
