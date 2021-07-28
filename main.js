@@ -15,19 +15,16 @@ const counterText = document.querySelector(".field__counter");
 const minuteText = document.querySelector(".field__minute");
 const secondText = document.querySelector(".field__second");
 
-const IMG_SIZE = 102;
+const IMG_SIZE = 103;
 let minute = 5;
 let second = 59;
 let pets = 12;
 let ticks = 10;
 let timerID;
-let win = false;
-let start = false;
 
 window.addEventListener("load", () => {
   updateSettingValues();
-  setTimer();
-  setCounter();
+  initGame();
 });
 
 settingBtn.addEventListener("click", () => {
@@ -37,10 +34,8 @@ settingBtn.addEventListener("click", () => {
 
 confirmBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  updateFieldValues();
+  initGame();
   toggleSetting();
-  setTimer();
-  setCounter();
   playBtn.firstElementChild.matches(".fa-stop") && togglePlayAndStop();
 });
 
@@ -50,7 +45,6 @@ playBtn.addEventListener("click", () => {
   }
 
   if (playBtn.firstElementChild.matches(".fa-play")) {
-    start = true;
     startGame();
     togglePlayAndStop();
   }
@@ -60,8 +54,27 @@ replayBtn.addEventListener("click", () => {
   replayGame();
 });
 
+gameBoard.addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) return;
+
+  if (e.target.matches(".field__dog") || e.target.matches(".field__cat")) {
+    const message = e.target.matches(".field__dog")
+      ? "You hurt the dog! Click the replay button to try again."
+      : "You hurt the cat! Click the replay button to try again.";
+    stopGame(message);
+    return;
+  }
+
+  e.target.remove();
+  --ticks;
+  setCounter();
+  if (ticks === 0)
+    stopGame("Congrats! You've burned all the ticks and saved the pets!!");
+});
+
 function toggleSetting() {
   setting.classList.toggle("active");
+  popup.matches(".active") && popup.classList.remove("active");
 }
 
 function togglePlayAndStop() {
@@ -75,7 +88,7 @@ function updateSettingValues() {
   ticksInput.value = ticks;
 }
 
-function updateFieldValues() {
+function setFieldValues() {
   minute = timerInput.value;
   second = 59;
   pets = petsInput.value;
@@ -87,16 +100,27 @@ function setCounter() {
   counterText.textContent = ticks;
 }
 
-function startGame() {
+function initGame() {
+  setFieldValues();
   setCounter();
   setTimer();
+  clearGameBoard();
+}
+
+function startGame() {
   startTimer();
   generateGameBoard();
 }
 
-function stopGame() {
+function stopGame(message) {
   clearInterval(timerID);
-  showPopupWithMessage();
+  showPopupWithMessage(message);
+}
+
+function replayGame() {
+  togglePlayAndStop();
+  initGame();
+  popup.classList.remove("active");
 }
 
 function generateGameBoard() {
@@ -137,24 +161,14 @@ function generateGameBoard() {
   }
 }
 
+function clearGameBoard() {
+  gameBoard.innerHTML = "";
+}
+
 function getCoordiante(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min);
-}
-
-function showPopupWithMessage(message) {
-  popup.classList.add("active");
-  popupText.textContent = message
-    ? message
-    : "Click the replay button to play again.";
-}
-
-function replayGame() {
-  togglePlayAndStop();
-  updateFieldValues();
-  setTimer();
-  popup.classList.remove("active");
 }
 
 function setTimer() {
@@ -170,7 +184,6 @@ function startTimer() {
   timerID = setInterval(() => {
     if (minute === 0 && second === 0) {
       clearInterval(timerID);
-      start = false;
       showPopupWithMessage(
         "You ran out of time. Click the replay button to play again."
       );
@@ -187,12 +200,19 @@ function startTimer() {
   }, 1000);
 }
 
+function showPopupWithMessage(message) {
+  popup.classList.add("active");
+  popupText.textContent = message
+    ? message
+    : "Click the replay button to play again.";
+}
+
 // 1. Change Play icon to Stop icon => complete
 // 2. Add stop game function => complete
 // 2a. Add replay button function => complete
 // 3. Populate pets and ticks to the field => Complete
-// 4. addEventlistner - pets === game end && ticks === counter goes down
-// 5. When pets are clicked, game ends with popup message
-// 5. When counter hits 0, game ends with popup message
+// 4. addEventlistner - pets === game end && ticks === counter goes down => Complete
+// 5. When pets are clicked, game ends with popup message => Complete
+// 5. When counter hits 0, game ends with popup message => Complete
 // 6. Add audio to the game
 // 7. Window resize? a. Reload b. Popup

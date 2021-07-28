@@ -193,6 +193,11 @@ p {
 .field__game-board img {
   position: absolute;
   height: calc(512px / 5);
+  transition: transform 200ms ease-in;
+}
+
+.field__game-board img:hover {
+  transform: scale(1.1);
 }
 
 /* Popup */
