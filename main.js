@@ -8,14 +8,16 @@ const petsInput = document.querySelector("#pets");
 const ticksInput = document.querySelector("#ticks");
 
 const counterText = document.querySelector(".field__counter");
-const timerText = document.querySelector(".field__timer");
+const minuteText = document.querySelector(".field__minute");
+const secondText = document.querySelector(".field__second");
 
-let timer = 5;
+let minute = 5;
+let second = 59;
 let pets = 10;
 let ticks = 10;
 
 window.addEventListener("load", () => {
-  updateSettingValues(timer, pets, ticks);
+  updateSettingValues();
 });
 
 settingBtn.addEventListener("click", () => {
@@ -28,8 +30,8 @@ confirmBtn.addEventListener("click", (e) => {
   toggleSetting();
 });
 
-playBtn.addEventListener("click", () => {
-  console.log("play");
+playBtn.addEventListener("click", (e) => {
+  //   console.log(e.target.firstElementChild.matches(".fa-play"));
   startGame();
 });
 
@@ -37,25 +39,41 @@ function toggleSetting() {
   setting.classList.toggle("active");
 }
 
-function updateSettingValues(timer, pets, ticks) {
-  timerInput.value = timer;
+function updateSettingValues() {
+  timerInput.value = minute;
   petsInput.value = pets;
   ticksInput.value = ticks;
 }
 
 function updateFieldValues() {
-  timer = timerInput.value;
+  minute = timerInput.value;
   pets = petsInput.value;
   ticks = ticksInput.value;
-  updateSettingValues(timer, pets, ticks);
+  updateSettingValues();
 }
 
-function updateCounter(ticks) {
+function updateCounter() {
   counterText.textContent = ticks;
 }
 
 function startGame() {
-  updateCounter(ticks);
+  updateCounter();
+  startTimer();
 }
 
-function startTimer() {}
+function startTimer() {
+  if (!minute && !second) return;
+  minute && (minuteText.textContent = --minute);
+  second && (secondText.textContent = second);
+
+  const timerID = setInterval(() => {
+    if (second !== 0) {
+      secondText.textContent = --second;
+    } else {
+      minuteText.textContent = --minute;
+      second = 59;
+      secondText.textContent = second;
+    }
+    if (minute === 0 && second === 0) clearInterval(timerID);
+  }, 1000);
+}
