@@ -15,6 +15,7 @@ let minute = 5;
 let second = 59;
 let pets = 10;
 let ticks = 10;
+let timerID;
 
 window.addEventListener("load", () => {
   updateSettingValues();
@@ -30,13 +31,23 @@ confirmBtn.addEventListener("click", (e) => {
   toggleSetting();
 });
 
-playBtn.addEventListener("click", (e) => {
-  //   console.log(e.target.firstElementChild.matches(".fa-play"));
-  startGame();
+playBtn.addEventListener("click", () => {
+  if (playBtn.firstElementChild.matches(".fa-play")) startGame();
+  togglePlay();
 });
 
 function toggleSetting() {
   setting.classList.toggle("active");
+}
+
+function togglePlay() {
+  if (playBtn.firstElementChild.matches(".fa-stop")) {
+    clearInterval(timerID);
+    return;
+  }
+
+  playBtn.firstElementChild.classList.remove("fa-play");
+  playBtn.firstElementChild.classList.add("fa-stop");
 }
 
 function updateSettingValues() {
@@ -66,7 +77,7 @@ function startTimer() {
   minute && (minuteText.textContent = --minute);
   second && (secondText.textContent = second);
 
-  const timerID = setInterval(() => {
+  timerID = setInterval(() => {
     if (second !== 0) {
       secondText.textContent = --second;
     } else {
@@ -77,3 +88,11 @@ function startTimer() {
     if (minute === 0 && second === 0) clearInterval(timerID);
   }, 1000);
 }
+
+// 1. Change Play icon to Stop icon => complete
+// 2. Add stop game function
+// 3. Populate pets and ticks to the field
+// 4. addEventlistner - pets === game end && ticks === counter goes down
+// 5. When pets are clicked, game ends with popup message
+// 5. When counter hits 0, game ends with popup message
+// 6. Add audio to the game
