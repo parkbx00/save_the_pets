@@ -185,8 +185,14 @@ p {
 
 /* Game Board */
 .field__game-board {
+  position: relative;
   width: 100%;
   height: 100%;
+}
+
+.field__game-board img {
+  position: absolute;
+  height: calc(512px / 5);
 }
 
 /* Popup */
