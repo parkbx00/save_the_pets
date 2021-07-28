@@ -23,10 +23,13 @@
       <h1 class="description__title">Save the pets from ticks!!</h1>
       <p class="description__details">
         Pets are in danger! Save them by burning the ticks. Be careful not to
-        hurt the pets!
+        hurt the pets! <br />
+        Click the setting button (<i class="fas fa-cog"></i>) to adjust the
+        number of pets and ticks and the timer.
       </p>
     </div>
     <div class="field">
+      <i class="field__setting fas fa-cog"></i>
       <div class="field__game-info">
         <button class="field__play-btn">
           <i class="fas fa-play"></i>
@@ -41,21 +44,43 @@
         </button>
         <span class="field__popup-text">Popup text goes here.</span>
       </div>
+      <form action="" class="setting">
+        <ul class="setting__list">
+          <li class="setting__item">
+            <label for="timer">Timer:</label>
+            <input type="number" id="timer" min="5" required />
+          </li>
+          <li class="setting__item">
+            <label for="pets">Number of Pets:</label>
+            <input type="number" id="pets" min="10" required />
+          </li>
+          <li class="setting__item">
+            <label for="ticks">Number of Ticks:</label>
+            <input type="number" id="ticks" min="10" required />
+          </li>
+        </ul>
+        <button class="setting__submit-btn">Confirm</button>
+      </form>
     </div>
     <footer class="footer">
       <div class="footer__attribution">
-        Icons made by
+        Pet icons
         <a href="https://www.freepik.com" title="Freepik" target="_blank"
-          >Freepik</a
+          >(Freepik)</a
         >
-        from
+        -
         <a href="https://www.flaticon.com/" title="Flaticon" target="_blank"
-          >www.flaticon.com</a
+          >FlatIcon</a
         >
-        ||
+        <span class="highlight">||</span>
         <a href="https://www.freepik.com/vectors/tree" target="_blank"
-          >Tree vector created by brgfx - www.freepik.com</a
+          >Tree background (brgfx) - Freepik</a
         >
+        <span class="highlight">||</span>
+        <a target="_blank" href="https://icons8.com/icon/QV5JEtrTP6nH/fire"
+          >Fire</a
+        >
+        icon - <a target="_blank" href="https://icons8.com">Icons8</a>
       </div>
       <p class="footer__rights">
         BRIAN PARK <span class="highlight">©2021</span>
