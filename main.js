@@ -44,7 +44,7 @@ window.addEventListener("resize", () => {
 
 settingBtn.addEventListener("click", () => {
   toggleSetting();
-  stopGame();
+  isGameOngoing && stopGame();
 });
 
 confirmBtn.addEventListener("click", (e) => {
@@ -118,11 +118,19 @@ function updateSettingValues() {
 }
 
 function setFieldValues() {
-  minute = timerInput.value;
-  second = 59;
   pets = petsInput.value;
-  ticks = ticksInput.value;
-  updateSettingValues();
+
+  if (pets % 4 === 0) {
+    minute = timerInput.value;
+    second = 59;
+    ticks = ticksInput.value;
+    updateSettingValues();
+    return true;
+  } else {
+    pets = 12;
+    petsInput.value = pets;
+    return false;
+  }
 }
 
 function setCounter() {
@@ -130,10 +138,16 @@ function setCounter() {
 }
 
 function initGame() {
-  setFieldValues();
-  setCounter();
-  setTimer();
-  clearGameBoard();
+  if (setFieldValues()) {
+    setCounter();
+    setTimer();
+    clearGameBoard();
+  } else {
+    alert(
+      "Please set the number of pets to increment of 4. Number is set to 12 as default."
+    );
+    initGame();
+  }
 }
 
 function startGame() {
