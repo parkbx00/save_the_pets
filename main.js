@@ -15,21 +15,36 @@ const counterText = document.querySelector(".field__counter");
 const minuteText = document.querySelector(".field__minute");
 const secondText = document.querySelector(".field__second");
 
+const backgroundAudio = new Audio("./sound/background.mp3");
+backgroundAudio.loop = true;
+backgroundAudio.volume = 0.35;
+const victoryAudio = new Audio("./sound/victory.wav");
+victoryAudio.volume = 0.5;
+const defeatAudio = new Audio("./sound/defeat.wav");
+defeatAudio.volume = 0.5;
+const tickAudio = new Audio("./sound/tick.wav");
+const petAudio = new Audio("./sound/pet.wav");
+
 const IMG_SIZE = 103;
 let minute = 5;
 let second = 59;
 let pets = 12;
 let ticks = 10;
 let timerID;
+let isGameOngoing = false;
 
 window.addEventListener("load", () => {
   updateSettingValues();
   initGame();
 });
 
+window.addEventListener("resize", () => {
+  stopGame("For best gaming experience, please click replay button.");
+});
+
 settingBtn.addEventListener("click", () => {
   toggleSetting();
-  timerID && clearInterval(timerID);
+  stopGame();
 });
 
 confirmBtn.addEventListener("click", (e) => {
@@ -40,7 +55,7 @@ confirmBtn.addEventListener("click", (e) => {
 });
 
 playBtn.addEventListener("click", () => {
-  if (playBtn.firstElementChild.matches(".fa-stop")) {
+  if (isGameOngoing && playBtn.firstElementChild.matches(".fa-stop")) {
     stopGame();
   }
 
@@ -55,9 +70,13 @@ replayBtn.addEventListener("click", () => {
 });
 
 gameBoard.addEventListener("click", (e) => {
-  if (e.target === e.currentTarget) return;
+  if (!isGameOngoing || e.target === e.currentTarget) return;
 
   if (e.target.matches(".field__dog") || e.target.matches(".field__cat")) {
+    petAudio.play();
+    setTimeout(() => {
+      defeatAudio.play();
+    }, 300);
     const message = e.target.matches(".field__dog")
       ? "You hurt the dog! Click the replay button to try again."
       : "You hurt the cat! Click the replay button to try again.";
@@ -65,11 +84,21 @@ gameBoard.addEventListener("click", (e) => {
     return;
   }
 
+  tickAudio.play();
+  tickAudio.currentTime = 0;
   e.target.remove();
   --ticks;
   setCounter();
-  if (ticks === 0)
+
+  if (ticks === 0) {
+    victoryAudio.play();
     stopGame("Congrats! You've burned all the ticks and saved the pets!!");
+  }
+});
+
+backgroundAudio.addEventListener("ended", () => {
+  backgroundAudio.currentTime = 0;
+  backgroundAudio.play();
 });
 
 function toggleSetting() {
@@ -108,17 +137,22 @@ function initGame() {
 }
 
 function startGame() {
+  isGameOngoing = true;
   startTimer();
   generateGameBoard();
+  backgroundAudio.play();
 }
 
 function stopGame(message) {
+  isGameOngoing = false;
   clearInterval(timerID);
-  showPopupWithMessage(message);
+  !setting.matches(".active") && showPopupWithMessage(message);
+  backgroundAudio.pause();
+  backgroundAudio.currentTime = 0;
 }
 
 function replayGame() {
-  togglePlayAndStop();
+  gameBoard.firstElementChild && togglePlayAndStop();
   initGame();
   popup.classList.remove("active");
 }
@@ -183,10 +217,7 @@ function startTimer() {
 
   timerID = setInterval(() => {
     if (minute === 0 && second === 0) {
-      clearInterval(timerID);
-      showPopupWithMessage(
-        "You ran out of time. Click the replay button to play again."
-      );
+      stopGame("You ran out of time. Click the replay button to play again.");
       return;
     }
 
@@ -206,13 +237,3 @@ function showPopupWithMessage(message) {
     ? message
     : "Click the replay button to play again.";
 }
-
-// 1. Change Play icon to Stop icon => complete
-// 2. Add stop game function => complete
-// 2a. Add replay button function => complete
-// 3. Populate pets and ticks to the field => Complete
-// 4. addEventlistner - pets === game end && ticks === counter goes down => Complete
-// 5. When pets are clicked, game ends with popup message => Complete
-// 5. When counter hits 0, game ends with popup message => Complete
-// 6. Add audio to the game
-// 7. Window resize? a. Reload b. Popup
