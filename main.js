@@ -171,6 +171,7 @@ function generateGameBoard() {
     const dogImg = document.createElement("img");
     dogImg.setAttribute("src", `./images/00${getCoordiante(1, 3)}-dog.png`);
     dogImg.setAttribute("class", "field__dog");
+    dogImg.setAttribute("draggable", false);
     dogImg.style.left = `${getCoordiante(x1, x2)}px`;
     dogImg.style.top = `${getCoordiante(y1, y2)}px`;
     gameBoard.append(dogImg);
@@ -180,6 +181,7 @@ function generateGameBoard() {
     const catImg = document.createElement("img");
     catImg.setAttribute("src", `./images/00${getCoordiante(1, 3)}-cat.png`);
     catImg.setAttribute("class", "field__cat");
+    catImg.setAttribute("draggable", false);
     catImg.style.left = `${getCoordiante(x1, x2)}px`;
     catImg.style.top = `${getCoordiante(y1, y2)}px`;
     gameBoard.append(catImg);
@@ -189,6 +191,7 @@ function generateGameBoard() {
     const tickImg = document.createElement("img");
     tickImg.setAttribute("src", `./images/026-tick.png`);
     tickImg.setAttribute("class", "field__tick");
+    tickImg.setAttribute("draggable", false);
     tickImg.style.left = `${getCoordiante(x1, x2)}px`;
     tickImg.style.top = `${getCoordiante(y1, y2)}px`;
     gameBoard.append(tickImg);

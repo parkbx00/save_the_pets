@@ -70,6 +70,13 @@ p {
   color: var(--clr-highlight);
 }
 
+.unselectable {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 /* Description */
 .description {
   margin: 1em 0;
