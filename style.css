@@ -19,12 +19,15 @@
 
   /* Radius */
   --rad-border: 0.25em;
+
+  /* Image Size */
+  --img-size: 512px;
 }
 
 /* Global Tags*/
 * {
   box-sizing: border-box;
-  font-family: "Baloo Chettan 2", cursive;
+  font-family: "Baloo Chettan 2", cursive, Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -88,7 +91,7 @@ p {
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 80%;
+  width: 95%;
   height: 80%;
   background: url("./images/bg.jpg") center/cover no-repeat;
   cursor: url("./images/icons8-fire-48.cur") 15 15, auto;
@@ -199,7 +202,7 @@ p {
 
 .field__game-board img {
   position: absolute;
-  height: calc(512px / 5);
+  height: calc(var(--img-size) / 5);
   transition: transform 200ms ease-in;
 }
 
@@ -254,4 +257,118 @@ p {
 .footer__github:hover {
   color: var(--clr-highlight);
   transform: scale(1.25);
+}
+
+@media screen and (max-width: 768px), screen and (max-height: 900px) {
+  /* Global Tags */
+  button {
+    height: 1.5em;
+    width: 1.5em;
+    font-size: 0.65em;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: var(--font-normal);
+  }
+
+  p {
+    font-size: var(--font-normal);
+  }
+
+  /* Description */
+  .description {
+    margin: 0.25em 0;
+  }
+
+  .description__details {
+    display: none;
+  }
+
+  /* Field */
+  .field {
+    width: 97.5%;
+    height: 97.5%;
+  }
+
+  .field__game-info {
+    margin-top: 0.25em;
+  }
+
+  .field__timer,
+  .field__counter {
+    line-height: var(--font-normal);
+  }
+
+  .field__minute,
+  .field__second {
+    width: 1.75rem;
+  }
+
+  /* Game Board */
+  .field__game-board img {
+    height: calc(var(--img-size) / 8);
+  }
+
+  /* Popup */
+  .field__popup {
+    left: 15%;
+    bottom: 15%;
+    width: 70%;
+    height: 35%;
+  }
+
+  .field__popup-text {
+    font-size: var(--font-small);
+  }
+
+  .field__replay-btn {
+    font-size: 1.75em;
+  }
+
+  /* Setting */
+  .setting {
+    left: 17.5%;
+    bottom: 2.5%;
+    width: 65%;
+    height: 50%;
+  }
+
+  .setting__list {
+    font-size: var(--font-small);
+  }
+
+  .setting__submit-btn {
+    height: 30px;
+    width: 80px;
+  }
+
+  /* Footer */
+  .footer,
+  .footer__rights {
+    font-size: calc(var(--font-micro) / 2);
+  }
+}
+
+@media screen and (max-height: 450px) {
+  /* Global Tags */
+  button {
+    padding: 0;
+    font-size: 0.35em;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: var(--font-micro);
+  }
+
+  /* Game Board */
+  .field__game-board img {
+    height: calc(var(--img-size) / 10);
+  }
+
+  /* Popup */
+  .field__replay-btn {
+    font-size: 1.25em;
+  }
 }

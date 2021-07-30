@@ -25,7 +25,7 @@ defeatAudio.volume = 0.5;
 const tickAudio = new Audio("./sound/tick.wav");
 const petAudio = new Audio("./sound/pet.wav");
 
-const IMG_SIZE = 103;
+const IMG_SIZE = 512;
 let minute = 5;
 let second = 59;
 let pets = 12;
@@ -166,17 +166,26 @@ function stopGame(message) {
 }
 
 function replayGame() {
-  gameBoard.firstElementChild && togglePlayAndStop();
+  togglePlayAndStop();
   initGame();
   popup.classList.remove("active");
 }
 
 function generateGameBoard() {
+  let adjustedImgSize;
+  if (screen.height <= 450) {
+    adjustedImgSize = IMG_SIZE / 10;
+  } else if (screen.width <= 768 || screen.height <= 900) {
+    adjustedImgSize = IMG_SIZE / 8;
+  } else {
+    adjustedImgSize = IMG_SIZE / 5;
+  }
+
   const gameBoardRect = gameBoard.getBoundingClientRect();
   const x1 = 0;
   const y1 = 0;
-  const x2 = gameBoardRect.width - IMG_SIZE;
-  const y2 = gameBoardRect.height - IMG_SIZE;
+  const x2 = gameBoardRect.width - adjustedImgSize;
+  const y2 = gameBoardRect.height - adjustedImgSize;
 
   const dogNumb = pets / 2;
   const catNumb = pets - dogNumb;
