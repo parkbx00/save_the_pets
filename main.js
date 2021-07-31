@@ -51,18 +51,12 @@ confirmBtn.addEventListener("click", (e) => {
   e.preventDefault();
   initGame();
   toggleSetting();
-  playBtn.firstElementChild.matches(".fa-stop") && togglePlayAndStop();
 });
 
 playBtn.addEventListener("click", () => {
-  if (isGameOngoing && playBtn.firstElementChild.matches(".fa-stop")) {
-    stopGame();
-  }
-
-  if (playBtn.firstElementChild.matches(".fa-play")) {
+  if (!isGameOngoing && playBtn.firstElementChild.matches(".fa-play")) {
     startGame();
-    togglePlayAndStop();
-  }
+  } else stopGame();
 });
 
 replayBtn.addEventListener("click", () => {
@@ -104,6 +98,7 @@ backgroundAudio.addEventListener("ended", () => {
 function toggleSetting() {
   setting.classList.toggle("active");
   popup.matches(".active") && popup.classList.remove("active");
+  !isGameOngoing && playBtn.firstElementChild.matches(".fa-stop") && initGame();
 }
 
 function togglePlayAndStop() {
@@ -142,6 +137,7 @@ function initGame() {
     setCounter();
     setTimer();
     clearGameBoard();
+    !playBtn.firstElementChild.matches(".fa-play") && togglePlayAndStop();
   } else {
     alert(
       "Please set the number of pets to increment of 4. Number is set to 12 as default."
@@ -153,6 +149,8 @@ function initGame() {
 function startGame() {
   isGameOngoing = true;
   startTimer();
+  togglePlayAndStop();
+  setting.matches(".active") && toggleSetting();
   generateGameBoard();
   backgroundAudio.play();
 }
@@ -160,7 +158,9 @@ function startGame() {
 function stopGame(message) {
   isGameOngoing = false;
   clearInterval(timerID);
-  !setting.matches(".active") && showPopupWithMessage(message);
+  !popup.matches(".active") &&
+    !setting.matches(".active") &&
+    showPopupWithMessage(message);
   backgroundAudio.pause();
   backgroundAudio.currentTime = 0;
 }
@@ -242,7 +242,7 @@ function startTimer() {
   secondText.textContent = second;
 
   timerID = setInterval(() => {
-    if (minute === 0 && second === 0) {
+    if (minute === 0 && second === 0 && ticks !== 0) {
       stopGame("You ran out of time. Click the replay button to play again.");
       return;
     }
