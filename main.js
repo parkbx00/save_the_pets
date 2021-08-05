@@ -161,6 +161,7 @@ function stopGame(message) {
   !popup.matches(".active") &&
     !setting.matches(".active") &&
     showPopupWithMessage(message);
+  playBtn.firstElementChild.matches(".fa-play") && togglePlayAndStop();
   backgroundAudio.pause();
   backgroundAudio.currentTime = 0;
 }
